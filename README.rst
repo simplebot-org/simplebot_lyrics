@@ -19,7 +19,7 @@ Lyrics
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
 
-A `SimpleBot`_ plugin that allows users to search for lyrics in Delta Chat.
+A `SimpleBot`_ plugin that allows users to search for song lyrics in `Delta Chat`_.
 
 Install
 -------
@@ -30,3 +30,4 @@ To install run::
 
 
 .. _SimpleBot: https://github.com/simplebot-org/simplebot
+.. _Delta Chat: https://delta.chat
