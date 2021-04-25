@@ -18,13 +18,13 @@ if __name__ == "__main__":
 
     with open("requirements.txt", encoding="utf-8") as req:
         install_requires = [
-            line
+            line.replace("==", ">=")
             for line in req.read().split("\n")
             if line and not line.startswith(("#", "-"))
         ]
     with open("requirements-test.txt", encoding="utf-8") as req:
         test_deps = [
-            line
+            line.replace("==", ">=")
             for line in req.read().split("\n")
             if line and not line.startswith(("#", "-"))
         ]
