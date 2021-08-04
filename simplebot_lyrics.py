@@ -1,3 +1,5 @@
+"""Plugin's commands definition."""
+
 from urllib.parse import quote, unquote_plus
 
 import bs4
@@ -22,20 +24,20 @@ def lyrics(payload: str, replies: Replies) -> None:
     """Get song lyrics."""
     base_url = "https://www.lyrics.com"
     url = "{}/lyrics/{}".format(base_url, quote(payload))
-    with requests.get(url, headers=HEADERS) as r:
-        r.raise_for_status()
-        soup = bs4.BeautifulSoup(r.text, "html.parser")
+    with requests.get(url, headers=HEADERS) as resp:
+        resp.raise_for_status()
+        soup = bs4.BeautifulSoup(resp.text, "html.parser")
     best_matches = soup.find("div", class_="best-matches")
-    a = best_matches and best_matches.a
-    if not a:
+    anchor = best_matches and best_matches.a
+    if not anchor:
         soup = soup.find("div", class_="sec-lyric")
-        a = soup and soup.a
-    if a:
-        artist, name = map(unquote_plus, a["href"].split("/")[-2:])
-        url = base_url + a["href"]
-        with requests.get(url, headers=HEADERS) as r:
-            r.raise_for_status()
-            soup = bs4.BeautifulSoup(r.text, "html.parser")
+        anchor = soup and soup.a
+    if anchor:
+        artist, name = map(unquote_plus, anchor["href"].split("/")[-2:])
+        url = base_url + anchor["href"]
+        with requests.get(url, headers=HEADERS) as resp:
+            resp.raise_for_status()
+            soup = bs4.BeautifulSoup(resp.text, "html.parser")
             lyric = soup.find(id="lyric-body-text")
             if lyric:
                 text = "🎵 {} - {}\n\n{}".format(name, artist, lyric.get_text())
@@ -46,6 +48,8 @@ def lyrics(payload: str, replies: Replies) -> None:
 
 
 class TestPlugin:
+    """Online tests"""
+
     def test_lyrics(self, mocker):
         msg = mocker.get_one_reply("/lyrics Baby Jane")
         assert "🎵" in msg.text
