@@ -5,6 +5,7 @@ from urllib.parse import quote, unquote_plus
 import bs4
 import requests
 import simplebot
+from deltachat import Message
 from pkg_resources import DistributionNotFound, get_distribution
 from simplebot.bot import Replies
 
@@ -19,11 +20,28 @@ HEADERS = {
 }
 
 
+@simplebot.filter
+def search_lyrics(message: Message, replies: Replies) -> None:
+    """Send me a song name or part of the lyrics to search."""
+    if not message.chat.is_group():
+        _search(message.text, replies)
+
+
 @simplebot.command
 def lyrics(payload: str, replies: Replies) -> None:
-    """Get song lyrics."""
+    """Get song lyrics.
+
+    Example:
+    /lyrics Baby Jane
+
+    You can also send me the song name to search directly in private.
+    """
+    _search(payload, replies)
+
+
+def _search(query: str, replies: Replies) -> None:
     base_url = "https://www.lyrics.com"
-    url = "{}/lyrics/{}".format(base_url, quote(payload))
+    url = "{}/lyrics/{}".format(base_url, quote(query))
     with requests.get(url, headers=HEADERS) as resp:
         resp.raise_for_status()
         soup = bs4.BeautifulSoup(resp.text, "html.parser")
@@ -44,7 +62,7 @@ def lyrics(payload: str, replies: Replies) -> None:
                 replies.add(text=text)
                 return
 
-    replies.add(text="No results for: {}".format(payload))
+    replies.add(text=f"❌ No results for: {query}")
 
 
 class TestPlugin:
@@ -53,3 +71,11 @@ class TestPlugin:
     def test_lyrics(self, mocker):
         msg = mocker.get_one_reply("/lyrics Baby Jane")
         assert "🎵" in msg.text
+
+    def test_filter(self, mocker) -> None:
+        msg = mocker.get_one_reply("Baby Jane")
+        assert "🎵" in msg.text
+
+        # filter should work only in private/direct chat
+        msgs = mocker.get_replies("Baby Jane", group="group1")
+        assert not msgs
