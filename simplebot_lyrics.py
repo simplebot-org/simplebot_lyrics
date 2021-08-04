@@ -62,7 +62,7 @@ def _search(query: str, replies: Replies) -> None:
                 replies.add(text=text)
                 return
 
-    replies.add(text=f"❌ No results for: {query}")
+    replies.add(text=f"❌ No results for: {query!r}")
 
 
 class TestPlugin:
