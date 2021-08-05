@@ -13,8 +13,8 @@ Lyrics
 .. image:: https://img.shields.io/pypi/l/simplebot_lyrics.svg
    :target: https://pypi.org/project/simplebot_lyrics
 
-.. image:: https://github.com/simplebot-org/simplebot_lyrics/actions/workflows/python-ci.yml/badge.svg
-   :target: https://github.com/simplebot-org/simplebot_lyrics/actions/workflows/python-ci.yml
+.. image:: https://github.com/adbenitez/simplebot_lyrics/actions/workflows/python-ci.yml/badge.svg
+   :target: https://github.com/adbenitez/simplebot_lyrics/actions/workflows/python-ci.yml
 
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
    :target: https://github.com/psf/black
