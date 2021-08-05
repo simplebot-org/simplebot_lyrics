@@ -33,8 +33,6 @@ def lyrics(payload: str, replies: Replies) -> None:
 
     Example:
     /lyrics Baby Jane
-
-    You can also send me the song name to search directly in private.
     """
     _search(payload, replies)
 
