@@ -13,5 +13,5 @@ Changelog
 - initial release
 
 
-.. _Unreleased: https://github.com/simplebot-org/simplebot_lyrics/compare/v1.1.0...HEAD
-.. _1.1.0: https://github.com/simplebot-org/simplebot_lyrics/compare/v1.0.0...v1.1.0
+.. _Unreleased: https://github.com/adbenitez/simplebot_lyrics/compare/v1.1.0...HEAD
+.. _1.1.0: https://github.com/adbenitez/simplebot_lyrics/compare/v1.0.0...v1.1.0
