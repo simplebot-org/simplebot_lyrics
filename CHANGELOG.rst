@@ -1,6 +1,11 @@
 Changelog
 =========
 
+`Unreleased`_
+-------------
+
+- added timeouts to avoid hanging forever.
+
 `1.1.0`_
 --------
 

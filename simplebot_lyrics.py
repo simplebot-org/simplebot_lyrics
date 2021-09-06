@@ -1,5 +1,6 @@
 """Plugin's commands definition."""
 
+import functools
 from urllib.parse import quote, unquote_plus
 
 import bs4
@@ -14,10 +15,13 @@ try:
 except DistributionNotFound:
     # package is not installed
     __version__ = "0.0.0.dev0-unknown"
-HEADERS = {
-    "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0)"
-    " Gecko/20100101 Firefox/60.0"
-}
+session = requests.Session()
+session.headers.update(
+    {
+        "user-agent": "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0"
+    }
+)
+session.request = functools.partial(session.request, timeout=15)  # type: ignore
 
 
 @simplebot.filter
@@ -40,7 +44,7 @@ def lyrics(payload: str, replies: Replies) -> None:
 def _search(query: str, replies: Replies) -> None:
     base_url = "https://www.lyrics.com"
     url = "{}/lyrics/{}".format(base_url, quote(query))
-    with requests.get(url, headers=HEADERS) as resp:
+    with session.get(url) as resp:
         resp.raise_for_status()
         soup = bs4.BeautifulSoup(resp.text, "html.parser")
     best_matches = soup.find("div", class_="best-matches")
@@ -51,7 +55,7 @@ def _search(query: str, replies: Replies) -> None:
     if anchor:
         artist, name = map(unquote_plus, anchor["href"].split("/")[-2:])
         url = base_url + anchor["href"]
-        with requests.get(url, headers=HEADERS) as resp:
+        with session.get(url) as resp:
             resp.raise_for_status()
             soup = bs4.BeautifulSoup(resp.text, "html.parser")
             lyric = soup.find(id="lyric-body-text")
