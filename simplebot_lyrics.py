@@ -43,7 +43,7 @@ def lyrics(payload: str, replies: Replies) -> None:
 
 def _search(query: str, replies: Replies) -> None:
     base_url = "https://www.lyrics.com"
-    url = "{}/lyrics/{}".format(base_url, quote(query))
+    url = f"{base_url}/lyrics/{quote(query)}"
     with session.get(url) as resp:
         resp.raise_for_status()
         soup = bs4.BeautifulSoup(resp.text, "html.parser")
@@ -60,7 +60,7 @@ def _search(query: str, replies: Replies) -> None:
             soup = bs4.BeautifulSoup(resp.text, "html.parser")
             lyric = soup.find(id="lyric-body-text")
             if lyric:
-                text = "🎵 {} - {}\n\n{}".format(name, artist, lyric.get_text())
+                text = f"🎵 {name} - {artist}\n\n{lyric.get_text()}"
                 replies.add(text=text)
                 return
 
