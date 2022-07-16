@@ -27,7 +27,7 @@ session.request = functools.partial(session.request, timeout=15)  # type: ignore
 @simplebot.filter
 def search_lyrics(message: Message, replies: Replies) -> None:
     """Send me a song name or part of the lyrics to search."""
-    if not message.chat.is_group():
+    if not message.chat.is_multiuser():
         _search(message.text, replies)
 
 
